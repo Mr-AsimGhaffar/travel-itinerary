@@ -34,7 +34,7 @@ export function TripResults({ data }) {
     <div className="max-w-4xl mx-auto my-12 px-4">
       {/* Main Heading */}
       <Motion.h2
-        className="text-4xl font-bold mb-8 text-center text-rose-600 drop-shadow-sm"
+        className="text-2xl md:text-4xl font-bold mb-8 text-center text-rose-600 drop-shadow-sm"
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -45,11 +45,11 @@ export function TripResults({ data }) {
       {/* Trip Overview Section */}
       {overview && (
         <div className="mb-12 p-6 bg-white rounded-2xl shadow-lg border border-gray-200">
-          <h3 className="text-2xl font-semibold text-rose-700 mb-4">
+          <h3 className="text-xl md:text-2xl font-semibold text-rose-700 mb-4">
             Trip Overview
           </h3>
           <div
-            className="whitespace-pre-wrap text-gray-800 leading-relaxed tracking-wide"
+            className="whitespace-pre-wrap text-gray-800 leading-relaxed tracking-wide text-sm md:text-base"
             dangerouslySetInnerHTML={{
               __html: overview.replace(/\n/g, "<br />"),
             }}
@@ -75,7 +75,7 @@ export function TripResults({ data }) {
         {days.map((day, index) => (
           <Panel
             header={
-              <span className="text-lg font-semibold text-rose-700">
+              <span className="text-base md:text-lg font-semibold text-rose-700">
                 {`Day ${day.day}`}: {day.location}
               </span>
             }
@@ -95,7 +95,7 @@ export function TripResults({ data }) {
                 transition={{ duration: 0.4 }}
                 className="p-5 whitespace-pre-wrap text-gray-800 leading-relaxed tracking-wide bg-white bg-opacity-80 rounded-lg"
               >
-                <p className="text-base">{day.description}</p>
+                <p className="text-sm md:text-base">{day.description}</p>
               </Motion.div>
             </AnimatePresence>
           </Panel>
@@ -105,7 +105,7 @@ export function TripResults({ data }) {
       {costEntries.length > 0 && (
         <div className="mt-12 p-8 bg-white rounded-3xl shadow-xl border border-gray-100">
           {/* Section Title */}
-          <h3 className="text-3xl font-bold text-rose-600 mb-8 text-center">
+          <h3 className="text-xl md:text-3xl font-bold text-rose-600 mb-8 text-center">
             Estimated Costs
           </h3>
 
@@ -114,14 +114,17 @@ export function TripResults({ data }) {
             {costEntries.map(({ label, value }) => (
               <div
                 key={label}
-                className="flex justify-start gap-4 items-center px-4 py-3 bg-gray-50 rounded-lg shadow-sm"
+                className="flex flex-col sm:flex-row justify-start gap-4 items-center px-4 py-3 bg-gray-50 rounded-lg shadow-sm"
               >
                 {/* Label */}
-                <strong className="text-lg text-rose-700">
+                <strong className="text-sm md:text-lg text-rose-700">
                   {formatString(label)}
                 </strong>
+
                 {/* Value */}
-                <span className="text-base text-gray-700">{value}</span>
+                <span className="text-sm md:text-base text-gray-700">
+                  {value}
+                </span>
               </div>
             ))}
           </div>

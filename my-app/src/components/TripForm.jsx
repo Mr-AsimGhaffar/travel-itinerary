@@ -98,7 +98,7 @@ export function TripForm({ onTripPlanned }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-pink-100 p-4 rounded-xl">
       <div className="w-full max-w-4xl bg-white p-8 rounded-2xl shadow-2xl">
-        <h2 className="text-2xl font-bold mb-4 text-center text-rose-600 drop-shadow-sm">
+        <h2 className="text-lg md:text-2xl font-bold mb-4 text-center text-rose-600 drop-shadow-sm">
           Plan Your Dream Trip
         </h2>
 
@@ -127,7 +127,7 @@ export function TripForm({ onTripPlanned }) {
 
         <Form layout="vertical" onFinish={onFinish} form={form}>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="startingPoint"
                 label="Starting Point"
@@ -136,7 +136,7 @@ export function TripForm({ onTripPlanned }) {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="endingPoint"
                 label="Ending Point"
@@ -148,7 +148,7 @@ export function TripForm({ onTripPlanned }) {
           </Row>
 
           <Row gutter={16}>
-            <Col span={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="duration"
                 label="Duration (in days)"
@@ -157,7 +157,7 @@ export function TripForm({ onTripPlanned }) {
                 <Input type="number" />
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="location"
                 label="Location"
@@ -170,7 +170,7 @@ export function TripForm({ onTripPlanned }) {
 
           <Row gutter={16}>
             {selectedPreset !== "solo" && (
-              <Col span={12}>
+              <Col xs={24} sm={24} md={12}>
                 <Form.Item
                   name="numberOfTravellers"
                   label="Number of Travellers"
@@ -179,7 +179,7 @@ export function TripForm({ onTripPlanned }) {
                 </Form.Item>
               </Col>
             )}
-            <Col span={selectedPreset !== "solo" ? 12 : 24}>
+            <Col xs={24} sm={24} md={selectedPreset !== "solo" ? 12 : 24}>
               <Form.Item name="travelType" label="Trip Type">
                 <Input />
               </Form.Item>
@@ -195,12 +195,12 @@ export function TripForm({ onTripPlanned }) {
           )}
 
           <Row gutter={16}>
-            <Col span={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item name="interests" label="Interests">
                 <Select mode="tags" />
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item name="mustHave" label="Must-Include">
                 <Select mode="tags" />
               </Form.Item>
@@ -213,7 +213,7 @@ export function TripForm({ onTripPlanned }) {
 
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading} block>
-              Plan My Trip
+              Plan Your Trip
             </Button>
           </Form.Item>
         </Form>

@@ -28,7 +28,7 @@ export function FeedbackForm({ tripId }) {
 
   return (
     <div className="bg-white p-4 rounded-md shadow-md mt-6">
-      <h3 className="text-2xl font-bold text-rose-700 mb-2 text-center">
+      <h3 className="text-lg md:text-2xl font-bold text-rose-700 mb-2 text-center">
         Leave Feedback
       </h3>
       <Input.TextArea

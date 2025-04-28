@@ -41,7 +41,7 @@ export function GetFeedback({ tripId }) {
 
       {visible && (
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-rose-100">
-          <h2 className="text-2xl font-bold text-rose-700 mb-4 text-center">
+          <h2 className="text-lg md:text-2xl font-bold text-rose-700 mb-4 text-center">
             User Feedback
           </h2>
 
