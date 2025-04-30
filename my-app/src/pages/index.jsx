@@ -9,6 +9,7 @@ import { FeedbackForm } from "../components/FeedbackForm";
 import { Toaster } from "react-hot-toast";
 import { GetFeedback } from "../components/GetFeedback";
 import Footer from "../components/Footer";
+import TripImageGallery from "../components/TripImageGallery";
 
 export default function HomePage() {
   const [tripData, setTripData] = useState(null);
@@ -44,6 +45,11 @@ export default function HomePage() {
             {tripData && (
               <div className="mt-10">
                 <TripResults data={tripData} />
+
+                <TripImageGallery
+                  tripData={tripData}
+                  images={tripData?.images}
+                />
 
                 <div className="mt-8 flex flex-col items-center gap-6">
                   <div className="flex flex-wrap gap-4 justify-center">

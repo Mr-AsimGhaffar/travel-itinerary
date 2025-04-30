@@ -6,7 +6,7 @@ import {
   CoffeeOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { planTrip } from "../utils/api";
+import { fetchTripImages, planTrip } from "../utils/api";
 import toast from "react-hot-toast";
 
 export function TripForm({ onTripPlanned }) {
@@ -18,9 +18,11 @@ export function TripForm({ onTripPlanned }) {
     setLoading(true);
     try {
       const trip = await planTrip(values);
+      const images = await fetchTripImages(values);
+      const tripWithImages = { ...trip, images };
       toast.success("Trip planned successfully!");
-      onTripPlanned(trip);
-      form.resetFields(); // optional: reset form after success
+      onTripPlanned(tripWithImages);
+      form.resetFields();
     } catch (error) {
       console.error("Trip planning failed:", error);
       toast.error("Failed to plan trip. Please try again.");

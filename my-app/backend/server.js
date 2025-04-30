@@ -190,3 +190,60 @@ app.get("/feedback/:tripId", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+// Get Pictures
+app.post("/get-unsplash-images", async (req, res) => {
+  const { location, startingPoint, endingPoint, interests, mustHave } =
+    req.body;
+
+  // Flatten and clean inputs
+  const toArray = (val) =>
+    Array.isArray(val)
+      ? val.filter((item) => typeof item === "string" && item.trim() !== "")
+      : typeof val === "string" && val.trim() !== ""
+      ? [val]
+      : [];
+
+  const queryParts = [
+    ...toArray(location),
+    ...toArray(startingPoint),
+    ...toArray(endingPoint),
+    ...toArray(interests),
+    ...toArray(mustHave),
+  ];
+
+  const query = queryParts.join(", ").trim() || "travel landscape";
+
+  try {
+    const response = await fetch(
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
+        query
+      )}&per_page=6`,
+      {
+        headers: {
+          Authorization: `Client-ID ${process.env.UNSPLASH_KEY}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Unsplash API Error:", errorText);
+      return res.status(500).json({ error: "Failed to fetch images" });
+    }
+
+    const data = await response.json();
+
+    const images = Array.isArray(data.results)
+      ? data.results.map((img) => ({
+          url: img.urls.small,
+          alt: img.alt_description || "Trip image",
+        }))
+      : [];
+
+    res.json({ images });
+  } catch (err) {
+    console.error("Unsplash fetch error:", err.message);
+    res.status(500).json({ error: "Failed to fetch images from Unsplash" });
+  }
+});

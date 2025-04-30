@@ -40,3 +40,18 @@ export async function getFeedback(tripId) {
   const data = await res.json();
   return data.feedback;
 }
+
+export async function fetchTripImages(tripData) {
+  const res = await fetch("http://localhost:3001/get-unsplash-images", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(tripData),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch images from Unsplash");
+  }
+
+  const data = await res.json();
+  return data.images;
+}
