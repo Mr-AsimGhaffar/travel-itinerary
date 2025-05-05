@@ -18,7 +18,7 @@ export default function TripPage() {
     async function fetchTrip() {
       try {
         const response = await fetch(
-          `http://localhost:3001/get-trip/${tripId}`
+          `https://trip-planner-itinerary-backend.fly.dev/get-trip/${tripId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch trip data");

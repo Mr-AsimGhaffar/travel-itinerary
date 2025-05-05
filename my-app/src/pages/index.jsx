@@ -18,7 +18,7 @@ export default function HomePage() {
   async function handleSave() {
     try {
       const id = await saveTrip(tripData);
-      const link = `https://trip-planner-itinerary-backend.fly.dev/trip/${id}`;
+      const link = `https://trip-planner-itinerary.fly.dev//trip/${id}`;
       setShareableLink(link);
       message.success("Trip saved! You can share the link.");
     } catch (err) {

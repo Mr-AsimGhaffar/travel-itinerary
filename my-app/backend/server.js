@@ -6,8 +6,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const Feedback = require("./models/Feedback");
 
-console.log("hello");
-
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -60,7 +58,7 @@ const Trip = mongoose.model("Trip", tripSchema);
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const corsOptions = {
-  origin: "https://trip-planner-itinerary-backend.fly.dev",
+  origin: "https://trip-planner-itinerary.fly.dev",
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"],
 };
@@ -138,6 +136,7 @@ app.post("/save-trip", async (req, res) => {
   }
 
   try {
+    delete markdown.images;
     const newTrip = new Trip({ markdown });
     const savedTrip = await newTrip.save();
     res.json({ tripId: savedTrip._id });
@@ -251,6 +250,6 @@ app.post("/get-unsplash-images", async (req, res) => {
   }
 });
 
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
