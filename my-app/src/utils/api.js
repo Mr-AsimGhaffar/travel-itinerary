@@ -1,19 +1,25 @@
 export async function planTrip(formData) {
-  const res = await fetch("http://localhost:3001/plan-trip", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData),
-  });
+  const res = await fetch(
+    "https://trip-planner-itinerary-backend.fly.dev/plan-trip",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    }
+  );
   const data = await res.json();
   return data.tripPlan;
 }
 
 export async function saveTrip(markdown) {
-  const res = await fetch("http://localhost:3001/save-trip", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ markdown }),
-  });
+  const res = await fetch(
+    "https://trip-planner-itinerary-backend.fly.dev/save-trip",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ markdown }),
+    }
+  );
 
   if (!res.ok) {
     throw new Error(`Failed to save trip: ${res.statusText}`);
@@ -24,11 +30,14 @@ export async function saveTrip(markdown) {
 }
 
 export async function submitFeedback({ tripId, message }) {
-  const res = await fetch("http://localhost:3001/feedback", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ tripId, message }),
-  });
+  const res = await fetch(
+    "https://trip-planner-itinerary-backend.fly.dev/feedback",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tripId, message }),
+    }
+  );
 
   if (!res.ok) throw new Error("Failed to submit feedback");
 
@@ -36,17 +45,22 @@ export async function submitFeedback({ tripId, message }) {
 }
 
 export async function getFeedback(tripId) {
-  const res = await fetch(`http://localhost:3001/feedback/${tripId}`);
+  const res = await fetch(
+    `https://trip-planner-itinerary-backend.fly.dev/feedback/${tripId}`
+  );
   const data = await res.json();
   return data.feedback;
 }
 
 export async function fetchTripImages(tripData) {
-  const res = await fetch("http://localhost:3001/get-unsplash-images", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(tripData),
-  });
+  const res = await fetch(
+    "https://trip-planner-itinerary-backend.fly.dev/get-unsplash-images",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(tripData),
+    }
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch images from Unsplash");

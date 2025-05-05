@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PDFExportButton } from "../components/PdfExportButton";
+import { PDFExportButton } from "../components/PDFExportButton";
 import { TripForm } from "../components/TripForm";
 import { TripResults } from "../components/TripResult";
 import { saveTrip } from "../utils/api";
@@ -18,7 +18,7 @@ export default function HomePage() {
   async function handleSave() {
     try {
       const id = await saveTrip(tripData);
-      const link = `http://localhost:5173/trip/${id}`;
+      const link = `https://trip-planner-itinerary-backend.fly.dev/trip/${id}`;
       setShareableLink(link);
       message.success("Trip saved! You can share the link.");
     } catch (err) {

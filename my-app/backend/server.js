@@ -4,8 +4,9 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const { v4: uuidv4 } = require("uuid");
 const Feedback = require("./models/Feedback");
+
+console.log("hello");
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -58,7 +59,13 @@ const Trip = mongoose.model("Trip", tripSchema);
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-app.use(cors());
+const corsOptions = {
+  origin: "https://trip-planner-itinerary-backend.fly.dev",
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"],
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // In-memory trip store (if needed)
@@ -187,10 +194,6 @@ app.get("/feedback/:tripId", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
-
 // Get Pictures
 app.post("/get-unsplash-images", async (req, res) => {
   const { location, startingPoint, endingPoint, interests, mustHave } =
@@ -246,4 +249,8 @@ app.post("/get-unsplash-images", async (req, res) => {
     console.error("Unsplash fetch error:", err.message);
     res.status(500).json({ error: "Failed to fetch images from Unsplash" });
   }
+});
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server is running on port ${port}`);
 });
