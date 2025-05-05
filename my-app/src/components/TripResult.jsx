@@ -76,7 +76,16 @@ export function TripResults({ data }) {
           <Panel
             header={
               <span className="text-base md:text-lg font-semibold text-rose-700">
-                {`Day ${day.day}`}: {day.location}
+                {`Day ${day.day}`}:{" "}
+                {day.location.split("/").map((part, index, arr) => (
+                  <React.Fragment key={index}>
+                    {part}
+                    {/* Add slash if it's not the last part */}
+                    {index < arr.length - 1 && "/"}
+                    {/* On small screens only, break after second slash */}
+                    {index === 1 && <br className="block md:hidden" />}
+                  </React.Fragment>
+                ))}
               </span>
             }
             key={`day-${index}`}
