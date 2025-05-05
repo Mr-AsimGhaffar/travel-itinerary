@@ -1,8 +1,9 @@
+// models/ImageResult.js
 const mongoose = require("mongoose");
 
-const imageCacheSchema = new mongoose.Schema(
+const imageResultSchema = new mongoose.Schema(
   {
-    hash: { type: String, required: true, unique: true },
+    hash: { type: String, unique: true },
     images: [
       {
         url: String,
@@ -13,4 +14,4 @@ const imageCacheSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("ImageCache", imageCacheSchema);
+module.exports = mongoose.model("ImageResult", imageResultSchema);

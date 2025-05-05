@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select, Row, Col } from "antd";
 import {
   CarOutlined,
   EnvironmentOutlined,
   CoffeeOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { fetchTripImages, planTrip } from "../utils/api";
 import toast from "react-hot-toast";
+import { BiTrip } from "react-icons/bi";
 
 export function TripForm({ onTripPlanned }) {
   const [form] = Form.useForm();
@@ -31,80 +31,109 @@ export function TripForm({ onTripPlanned }) {
     }
   };
 
-  const presets = {
-    weekend: {
-      startingPoint: "Milan",
-      endingPoint: "Lake Como",
-      duration: 2,
-      location: "Italy",
-      numberOfTravellers: 2,
-      travelType: "Weekend Getaway",
-      travelStyle: "Romantic",
-      interests: ["Scenic views", "Wine tasting", "Boat rides"],
-      mustHave: ["Lake Como", "Bellagio", "Riva cruise"],
-      requirements: "No early mornings, avoid crowded places",
-    },
-    swiss: {
-      startingPoint: "Zurich",
-      endingPoint: "Geneva",
-      duration: 7,
-      location: "Switzerland",
-      numberOfTravellers: 4,
-      travelType: "Adventure",
-      travelStyle: "Scenic",
-      interests: ["Alps", "Chocolate tasting", "Train rides"],
-      mustHave: ["Zermatt", "Interlaken", "Glacier Express"],
-      requirements: "Include 2 days of hiking, and a spa day",
-    },
-    beach: {
-      startingPoint: "Miami",
-      endingPoint: "Bahamas",
-      duration: 5,
-      location: "Caribbean",
-      numberOfTravellers: 2,
-      travelType: "Relaxation",
-      travelStyle: "Beach",
-      interests: ["Swimming", "Snorkeling", "Sunsets"],
-      mustHave: ["Nassau", "Cable Beach", "Coral reefs"],
-      requirements: "Ocean view hotel, beach massage",
-    },
-    solo: {
-      startingPoint: "Berlin",
-      endingPoint: "Prague",
-      duration: 4,
-      location: "Central Europe",
-      travelType: "Backpacking",
-      interests: ["Museums", "Street food", "Photography"],
-      mustHave: ["Charles Bridge", "Berlin Wall", "Local hostels"],
-      requirements: "Cheap transport, flexible check-in times",
-    },
-  };
+  const presets = React.useMemo(
+    () => ({
+      milan: {
+        startingPoint: "Florence",
+        endingPoint: "Milan",
+        duration: 1,
+        location: "italy",
+        numberOfTravellers: 2,
+        travelType: "Weekend Getaway",
+        travelStyle: "Adventure",
+        interests: ["Scenic views", "Wine tasting", "Boat rides"],
+        mustHave: [
+          "Brunate funicular ride",
+          "Franciacorta wine region",
+          "Navigli canal boat ride",
+          "Tuscany countryside drive",
+          "Chianti wine tour",
+          "Sunset at Piazzale Michelangelo",
+        ],
+        requirements: "No early mornings, avoid crowded places",
+      },
+      weekend: {
+        startingPoint: "Milan",
+        endingPoint: "Lake Como",
+        duration: 2,
+        location: "Italy",
+        numberOfTravellers: 2,
+        travelType: "Weekend Getaway",
+        travelStyle: "Romantic",
+        interests: ["Scenic views", "Wine tasting", "Boat rides"],
+        mustHave: ["Lake Como", "Bellagio", "Riva cruise"],
+        requirements: "No early mornings, avoid crowded places",
+      },
+      swiss: {
+        startingPoint: "Zurich",
+        endingPoint: "Geneva",
+        duration: 7,
+        location: "Switzerland",
+        numberOfTravellers: 4,
+        travelType: "Adventure",
+        travelStyle: "Scenic",
+        interests: ["Alps", "Chocolate tasting", "Train rides"],
+        mustHave: ["Zermatt", "Interlaken", "Glacier Express"],
+        requirements: "Include 2 days of hiking, and a spa day",
+      },
+      beach: {
+        startingPoint: "Miami",
+        endingPoint: "Bahamas",
+        duration: 5,
+        location: "Caribbean",
+        numberOfTravellers: 2,
+        travelType: "Relaxation",
+        travelStyle: "Beach",
+        interests: ["Swimming", "Snorkeling", "Sunsets"],
+        mustHave: ["Nassau", "Cable Beach", "Coral reefs"],
+        requirements: "Ocean view hotel, beach massage",
+      },
+    }),
+    []
+  );
 
-  const handlePreset = (type) => {
-    form.setFieldsValue(presets[type]);
-    setSelectedPreset(type);
-  };
+  const handlePreset = React.useCallback(
+    (type) => {
+      form.setFieldsValue(presets[type]);
+      setSelectedPreset(type);
+    },
+    [form, presets]
+  );
+
+  useEffect(() => {
+    handlePreset("milan");
+  }, [handlePreset]);
 
   const PresetButton = ({ icon, label, type }) => (
     <div
       onClick={() => handlePreset(type)}
-      className={`cursor-pointer flex flex-col items-center justify-center p-4 border rounded-2xl shadow-md w-40 h-32 transition hover:shadow-xl ${
-        selectedPreset === type ? "border-rose-400 bg-rose-50" : "bg-white"
-      }`}
+      className={`cursor-pointer flex-none flex flex-col items-center justify-center
+    p-2 sm:p-4 border rounded-xl shadow-md
+    w-22 h-20 sm:w-40 sm:h-32 transition hover:shadow-xl
+    ${selectedPreset === type ? "border-rose-400 bg-rose-50" : "bg-white"}`}
     >
-      <div className="text-3xl mb-2 text-rose-500">{icon}</div>
-      <span className="text-sm font-semibold text-gray-700">{label}</span>
+      <div className="text-xl sm:text-3xl mb-1 sm:mb-2 text-rose-500">
+        {icon}
+      </div>
+      <span className="text-[10px] sm:text-sm font-semibold text-gray-700 text-center">
+        {label}
+      </span>
     </div>
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-pink-100 p-4 rounded-xl">
+    <div className="flex items-center justify-center bg-gradient-to-br from-blue-100 to-pink-100 p-4 rounded-xl">
       <div className="w-full max-w-4xl bg-white p-8 rounded-2xl shadow-2xl">
         <h2 className="text-lg md:text-2xl font-bold mb-4 text-center text-rose-600 drop-shadow-sm">
           Plan Your Dream Trip
         </h2>
 
         <div className="flex gap-4 flex-wrap justify-center mb-6">
+          <PresetButton
+            icon={<BiTrip />}
+            label="1 Day Milan Trip"
+            type="milan"
+          />
           <PresetButton
             icon={<CoffeeOutlined />}
             label="Weekend Trip"
@@ -119,11 +148,6 @@ export function TripForm({ onTripPlanned }) {
             icon={<CarOutlined />}
             label="Beach Vacation"
             type="beach"
-          />
-          <PresetButton
-            icon={<UserOutlined />}
-            label="Solo Backpacking"
-            type="solo"
           />
         </div>
 
@@ -188,7 +212,8 @@ export function TripForm({ onTripPlanned }) {
             </Col>
           </Row>
 
-          {(selectedPreset === "swiss" ||
+          {(selectedPreset === "milan" ||
+            selectedPreset === "swiss" ||
             selectedPreset === "beach" ||
             selectedPreset === "weekend") && (
             <Form.Item name="travelStyle" label="Travel Style">

@@ -5,6 +5,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const Feedback = require("./models/Feedback");
+const crypto = require("crypto");
+const ImageResult = require("./models/ImageCache");
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -27,6 +29,10 @@ db.once("open", () => {
 // Define the Trip schema and model
 const tripSchema = new mongoose.Schema(
   {
+    hash: {
+      type: String,
+      unique: true,
+    },
     markdown: {
       overview: {
         type: String,
@@ -69,6 +75,10 @@ app.use(bodyParser.json());
 // In-memory trip store (if needed)
 const trips = {};
 
+function generateHash(obj) {
+  return crypto.createHash("sha256").update(JSON.stringify(obj)).digest("hex");
+}
+
 // Gemini setup
 app.post("/plan-trip", async (req, res) => {
   try {
@@ -84,6 +94,13 @@ app.post("/plan-trip", async (req, res) => {
       mustHave,
       requirements,
     } = req.body;
+
+    const hash = generateHash(req.body);
+    const existingTrip = await Trip.findOne({ hash });
+
+    if (existingTrip) {
+      return res.json({ tripPlan: existingTrip.markdown });
+    }
 
     const prompt = `Plan a trip with the following details:
   - Starting Point: ${startingPoint}
@@ -119,6 +136,10 @@ Make sure to structure the response to reflect the details provided, adjusting t
     });
     const result = await model.generateContent(prompt);
     const tripPlan = JSON.parse(result.response.text());
+
+    // Save new trip in DB with the hash
+    const newTrip = new Trip({ markdown: tripPlan, hash });
+    await newTrip.save();
 
     res.json({ tripPlan });
   } catch (error) {
@@ -195,28 +216,31 @@ app.get("/feedback/:tripId", async (req, res) => {
 
 // Get Pictures
 app.post("/get-unsplash-images", async (req, res) => {
-  const { location, startingPoint, endingPoint, interests, mustHave } =
-    req.body;
-
-  // Flatten and clean inputs
-  const toArray = (val) =>
-    Array.isArray(val)
-      ? val.filter((item) => typeof item === "string" && item.trim() !== "")
-      : typeof val === "string" && val.trim() !== ""
-      ? [val]
-      : [];
-
-  const queryParts = [
-    ...toArray(location),
-    ...toArray(startingPoint),
-    ...toArray(endingPoint),
-    ...toArray(interests),
-    ...toArray(mustHave),
-  ];
-
-  const query = queryParts.join(", ").trim() || "travel landscape";
+  const hash = generateHash(req.body);
 
   try {
+    const cached = await ImageResult.findOne({ hash });
+    if (cached) {
+      return res.json({ images: cached.images });
+    }
+
+    const toArray = (val) =>
+      Array.isArray(val)
+        ? val.filter((item) => typeof item === "string" && item.trim() !== "")
+        : typeof val === "string" && val.trim() !== ""
+        ? [val]
+        : [];
+
+    const queryParts = [
+      ...toArray(req.body.location),
+      ...toArray(req.body.startingPoint),
+      ...toArray(req.body.endingPoint),
+      ...toArray(req.body.interests),
+      ...toArray(req.body.mustHave),
+    ];
+
+    const query = queryParts.join(", ").trim() || "travel landscape";
+
     const response = await fetch(
       `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
         query
@@ -242,6 +266,8 @@ app.post("/get-unsplash-images", async (req, res) => {
           alt: img.alt_description || "Trip image",
         }))
       : [];
+
+    await new ImageResult({ hash, images }).save();
 
     res.json({ images });
   } catch (err) {
