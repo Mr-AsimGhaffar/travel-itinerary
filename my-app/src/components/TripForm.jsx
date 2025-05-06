@@ -34,21 +34,22 @@ export function TripForm({ onTripPlanned }) {
   const presets = React.useMemo(
     () => ({
       milan: {
-        startingPoint: "Florence",
+        startingPoint: "Milan",
         endingPoint: "Milan",
         duration: 1,
         location: "italy",
         numberOfTravellers: 2,
         travelType: "Weekend Getaway",
         travelStyle: "Adventure",
-        interests: ["Scenic views", "Wine tasting", "Boat rides"],
+        interests: ["Scenic views", "Wine tasting"],
         mustHave: [
           "Brunate funicular ride",
           "Franciacorta wine region",
           "Navigli canal boat ride",
           "Tuscany countryside drive",
-          "Chianti wine tour",
+          "Milan Cathedral",
           "Sunset at Piazzale Michelangelo",
+          "Cycle around Milan’s hidden gems ",
         ],
         requirements: "No early mornings, avoid crowded places",
       },
