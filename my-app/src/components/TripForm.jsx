@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Row, Col } from "antd";
+import { Form, Input, Button, Select, Row, Col, Divider } from "antd";
 import {
   CarOutlined,
   EnvironmentOutlined,
@@ -105,25 +105,35 @@ export function TripForm({ onTripPlanned }) {
   }, [handlePreset]);
 
   const PresetButton = ({ icon, label, type }) => (
-    <div
-      onClick={() => handlePreset(type)}
-      className={`cursor-pointer flex-none flex flex-col items-center justify-center
-    p-2 sm:p-4 border rounded-xl shadow-md
-    w-22 h-20 sm:w-40 sm:h-32 transition hover:shadow-xl
-    ${selectedPreset === type ? "border-rose-400 bg-rose-50" : "bg-white"}`}
-    >
-      <div className="text-xl sm:text-3xl mb-1 sm:mb-2 text-rose-500">
-        {icon}
+    <>
+      <div
+        onClick={() => handlePreset(type)}
+        className={`block sm:hidden cursor-pointer p-2 border rounded-lg shadow-md
+          ${
+            selectedPreset === type ? "border-rose-400 bg-rose-50" : "bg-white"
+          }`}
+      >
+        <span className="text-[10px] font-semibold text-gray-700 text-center block">
+          {label}
+        </span>
       </div>
-      <span className="text-[10px] sm:text-sm font-semibold text-gray-700 text-center">
-        {label}
-      </span>
-    </div>
+      <div
+        onClick={() => handlePreset(type)}
+        className={`hidden sm:flex cursor-pointer flex-none flex-col items-center justify-center
+    p-4 border rounded-xl shadow-md w-40 h-32 transition hover:shadow-xl
+    ${selectedPreset === type ? "border-rose-400 bg-rose-50" : "bg-white"}`}
+      >
+        <div className="text-3xl mb-2 text-rose-500">{icon}</div>
+        <span className="text-sm font-semibold text-gray-700 text-center">
+          {label}
+        </span>
+      </div>
+    </>
   );
 
   return (
-    <div className="flex items-center justify-center bg-gradient-to-br from-blue-100 to-pink-100 p-4 rounded-xl">
-      <div className="w-full max-w-4xl bg-white p-8 rounded-2xl shadow-2xl">
+    <div className="flex items-center justify-center bg-gradient-to-br from-blue-100 to-pink-100 p-0 sm:p-4 rounded-xl">
+      <div className="w-full max-w-4xl bg-white p-4 sm:p-8 rounded-2xl shadow-2xl">
         <h2 className="text-lg md:text-2xl font-bold mb-4 text-center text-rose-600 drop-shadow-sm">
           Plan Your Dream Trip
         </h2>

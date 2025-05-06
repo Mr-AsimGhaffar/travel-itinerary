@@ -38,7 +38,7 @@ export default function HomePage() {
             Craft Your Perfect Journey with Ease!
           </h1>
 
-          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-10">
+          <div className="bg-white rounded-2xl shadow-xl p-0 sm:p-10">
             <Toaster />
             <TripForm onTripPlanned={setTripData} />
 
